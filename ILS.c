@@ -1,6 +1,4 @@
 #include <stdio.h>
-
-
 #include "arquivo.c"
 /*
 
@@ -12,7 +10,11 @@
 */
 
 int main(int argc, char const *argv[]){
-	arquivo();
+	char arq[50];
+	printf("Arquivo: ");
+	gets(arq);
+	//Abre o arquivo
+	arquivo(arq);
 	/*
 	s = solucaoInicial(S);
 	s1 = ILS(s);
