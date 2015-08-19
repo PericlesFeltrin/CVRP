@@ -1,8 +1,9 @@
-void arquivo(char arq[50]){
-	int tamLinha = 100, iLinha = 0, cidades = 0, *cidadeX, *cidadeY, *cidadeD; 
+void arquivo(char arq[50], int *cidadeX, int *cidadeY, int *cidadeD){
+	int tamLinha = 100, iLinha = 0, cidades, demanda = 0, capacidade; 
 	char linha[tamLinha];
 	char *token;
 	FILE *arquivo;
+	float x;
 	//Nome do Arquivo
 	arquivo = fopen(arq, "r");
 	if(arquivo == NULL){
@@ -20,6 +21,13 @@ void arquivo(char arq[50]){
 				cidadeX = malloc((cidades) * sizeof(int));
 				cidadeY = malloc((cidades) * sizeof(int));
 				cidadeD = malloc((cidades) * sizeof(int));
+			}else if (iLinha == 5){ 
+				//Capacidade
+				token = strtok(linha," ");
+				token = strtok (NULL, " ");
+				token = strtok (NULL, " ");
+				capacidade = atoi(token);
+				printf("Capacidade: %d \n", capacidade);
 			}else if (iLinha > 6 && iLinha <= 6+cidades){
 				//Cidade X Y
 				int cidade;
@@ -41,6 +49,7 @@ void arquivo(char arq[50]){
 				token = strtok (NULL, " ");
 				//printf("Demanda: %s \n", token);
 				cidadeD[cidade - 1] = atoi(token);
+				demanda += atoi(token);
 			}
 			iLinha++;
 		}
@@ -52,4 +61,6 @@ void arquivo(char arq[50]){
 		printf("Y: %d ", cidadeY[i]);
 		printf("D: %d \n", cidadeD[i]);
 	}
+	printf("Demanda: %d \n", demanda );
+	printf("Minimo de carros: %f  \n", ((float)demanda/(float)capacidade) );
 }
