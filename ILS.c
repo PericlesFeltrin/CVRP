@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h> 
 #include "arquivo.c"
 /*
 
@@ -12,13 +13,15 @@
 */
 
 int main(int argc, char const *argv[]){
+	int *cidadeX, *cidadeY, *cidadeD;
 	char arq[50];
-	/*printf("Arquivo: ");
+	/*
+	printf("Arquivo: ");
 	gets(arq);
 	//Abre o arquivo
-	arquivo(arq);
+	arquivo(arq, cidadeX, cidadeY, cidadeD);
 	*/
-	arquivo("A-n32-k5.vrp");
+	arquivo("A-n32-k5.vrp", cidadeX, cidadeY, cidadeD);
 	/*
 	s = solucaoInicial(S);
 	s1 = ILS(s);
