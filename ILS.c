@@ -4,7 +4,7 @@
 #include <math.h> 
 
 //#include "arquivo.c"
-#include "distancia.c"
+#include "calcDistancia.c"
 /*
 
 #include<solucaoInicial.c>
@@ -17,18 +17,18 @@
 int main(int argc, char const *argv[]){
 	int *cidadeX, *cidadeY, *cidadeD, demandaTotal = 0, capacidade, cidades;
 	int tamLinha = 100, iLinha = 0;
-	float **rota;
+	float **distancia;
 	char arq[50];
 	char linha[tamLinha];
 	char *token;
 	FILE *arquivo;
 	
 	//printf("Arquivo: ");
-	scanf("%s", arq);
+	//scanf("%s", arq);
 
 	//Nome do Arquivo
-	arquivo = fopen(arq, "r");
-	//arquivo = fopen("A-n32-k5.vrp", "r");
+	//arquivo = fopen(arq, "r");
+	arquivo = fopen("E-n22-k4.vrp", "r");
 	if(arquivo == NULL){
 		printf("Erro, nao foi possivel abrir o arquivo %s. \n", arq);
 	}else{
@@ -59,13 +59,13 @@ int main(int argc, char const *argv[]){
 				  printf( "Erro Malloc Demanda!\n");
 				  exit(-1);
 				}
-				//Alocação do vetor de rotas
-				rota = malloc((cidades) * sizeof(float *));
+				//Alocação do vetor de distancias
+				distancia = malloc((cidades) * sizeof(float *));
 				for (int i = 0; i < cidades; ++i){
-					rota[i] = malloc((i+1) * sizeof(float *));
+					distancia[i] = malloc((i) * sizeof(float *));
 				}
-				if (rota == NULL) {
-				  printf( "Erro Malloc Rota!\n");
+				if (distancia == NULL) {
+				  printf( "Erro Malloc distancia!\n");
 				  exit(-1);
 				}
 			}else if (iLinha == 5){ 
@@ -112,8 +112,27 @@ int main(int argc, char const *argv[]){
 	printf("Minimo de Veículos: %f \n", ceil((float)demandaTotal/(float)capacidade));
 	
 	//Gera a "matriz" com as distâncias
-	distancia(cidades, cidadeX, cidadeY, rota);
+	calcDistancia(cidades, cidadeX, cidadeY, distancia);
 
+	printf("\n %f \n", distancia[20][17] + distancia[20][18] + distancia[18][15] + distancia[15][12] + distancia[19][16] + distancia[21][19] + distancia [21][14] + distancia[13][11] + distancia[11][4] + distancia[4][3] + distancia[8][3] + distancia[10][8] + distancia[9][7] + distancia[7][5] + distancia[5][2] + distancia[2][1] + distancia[6][1] + distancia[17][0] + distancia[12][0] + distancia[16][0] + distancia[14][0] + distancia[13][0] + distancia[10][0] + distancia[9][0] + distancia[6][0]);
+
+/*
+	int c, cc;
+	float dis = 0;
+	printf("Cidade: \n");
+	scanf("%d", &c);
+	while(1){
+		printf("Cidade: \n");
+		scanf("%d", &cc);
+		if(c > cc){
+			dis += distancia[c][cc];
+		}else{
+			dis += distancia[cc][c];
+		}
+		printf("Dis: %f \n", dis );		
+		c = cc;
+	}
+*/
 	/*
 	s = solucaoInicial(S);
 	s1 = ILS(s);
@@ -126,7 +145,7 @@ int main(int argc, char const *argv[]){
 	free(cidadeX);
 	free(cidadeY);
 	free(cidadeD);
-	free(rota);
+	free(distancia);
 
 	return 0;
 }
