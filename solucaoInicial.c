@@ -2,32 +2,49 @@ int compare (const void * a, const void * b){
   return ( *(int*)a - *(int*)b );
 }
 
-void solucaoInicial(){
-//(int *custoRota, int *index, int *vizinho, int inicial, int cidades, int caso){
-	int custo, final, j, newCusto, aux;
-	custo = (int)NULL;
-	final = (int)NULL;
-	aux = (int)NULL;
-	for (j = 0; j < cidades; j++){
-		newCusto = pesquisaRota(inicial, vizinho[j], custoRota, index);
-		if ((newCusto != 0) && (newCusto < custo)){
-			custo = newCusto;
-			aux = j;
-		}else if (newCusto != 0 && newCusto == custo && caso > 0){
-			//rotaAlternativa(custoRota, index, vizinho, inicial, cidades, resposta);
-			custo = newCusto;
-			aux = j;
-			caso--;
-		}else if (custo == (int)NULL && newCusto != 0){
-			custo = newCusto;
-			aux = j;
-		}
-	}
-	final = vizinho[aux];
-	vizinho[aux] = vizinho[j-1];
-	vizinho[j-1] = (int)NULL;
-  	qsort (vizinho, cidades-1, sizeof(int), compare);
-	return final;
-}
+void solucaoInicial(float **distancia, int quantCidade, int capacidade){
+	int cidades[quantCidade];
+	int cidadeAtual = 0, proxCidade, i, j, aux;
+	float custo = 0, custoFinal = 0, newCusto;
 
+	for (i = 1; i < quantCidade; i++){
+		cidades[i-1] = i;
+	}
+
+	aux = (int)NULL;
+	while(cidades[quantCidade-1] != 0){
+		newCusto = 0;
+		custo = 0;
+		for (j = 0; j < i-1; j++){
+			if(cidades[j] != 0){
+				proxCidade = cidades[j];
+				if(cidadeAtual < proxCidade){
+					newCusto = distancia[proxCidade][cidadeAtual];
+				}else{
+					newCusto = distancia[cidadeAtual][proxCidade];
+				}
+				
+				if ((newCusto != 0) && (newCusto < custo)){
+					custo = newCusto;
+					aux = j;
+				}else if (custo == 0 && newCusto != 0){
+					custo = newCusto;
+					aux = j;
+				}
+			}
+		}
+
+		if (custoFinal+custo < capacidade && custo != 0){
+			custoFinal += custo;
+			printf("Foi %d \n", cidades[aux]);
+			cidades[aux] = (int)NULL;
+  			qsort (cidades, quantCidade-1, sizeof(int), compare);
+		}else{
+			custoFinal += custo;
+			printf("Custo %f \n",custoFinal);
+			custoFinal = 0;
+		}
+		i--;
+	}
+	printf("Custo %f \n",custoFinal);
 }
