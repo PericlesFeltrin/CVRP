@@ -117,7 +117,7 @@ int main(int argc, char const *argv[]){
 	printf("\n %f \n", distancia[20][17] + distancia[20][18] + distancia[18][15] + distancia[15][12] + distancia[19][16] + distancia[21][19] + distancia [21][14] + distancia[13][11] + distancia[11][4] + distancia[4][3] + distancia[8][3] + distancia[10][8] + distancia[9][7] + distancia[7][5] + distancia[5][2] + distancia[2][1] + distancia[6][1] + distancia[17][0] + distancia[12][0] + distancia[16][0] + distancia[14][0] + distancia[13][0] + distancia[10][0] + distancia[9][0] + distancia[6][0]);
 
 
-	solucaoInicial(distancia, quantCidades, capacidade);
+	solucaoInicial(distancia, quantCidades, capacidade, cidadeD);
 	/*
 	s = solucaoInicial(S);
 	s1 = ILS(s);

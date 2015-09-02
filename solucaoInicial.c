@@ -2,49 +2,68 @@ int compare (const void * a, const void * b){
   return ( *(int*)a - *(int*)b );
 }
 
-void solucaoInicial(float **distancia, int quantCidade, int capacidade){
-	int cidades[quantCidade];
-	int cidadeAtual = 0, proxCidade, i, j, aux;
+void solucaoInicial(float **distancia, int quantCidade, int capacidade, int *cidadeD){
+	int *cidades;
+	int cidadeAtual = 0, proxCidade, i, j, aux, newDemanda, demanda, demandaTotal = 0;
 	float custo = 0, custoFinal = 0, newCusto;
 
-	for (i = 1; i < quantCidade; i++){
-		cidades[i-1] = i;
+
+	cidades = malloc((quantCidade-1) * sizeof(int));
+	if (cidades == NULL) {
+	  printf( "Erro Malloc Cidade X!\n");
+	  exit(-1);
+	}
+
+	printf("capacidade %d\n", capacidade);
+
+	for (i = 0; i < quantCidade; i++){
+		cidades[i] = i;
 	}
 
 	aux = (int)NULL;
 	while(cidades[quantCidade-1] != 0){
 		newCusto = 0;
 		custo = 0;
-		for (j = 0; j < i-1; j++){
-			if(cidades[j] != 0){
-				proxCidade = cidades[j];
+		demanda = 0;
+		for (j = 0; j < quantCidade; j++){
+			proxCidade = cidades[j];
+			newDemanda = cidadeD[proxCidade];
+			if(proxCidade != 0 && demandaTotal+newDemanda < capacidade){
 				if(cidadeAtual < proxCidade){
 					newCusto = distancia[proxCidade][cidadeAtual];
 				}else{
 					newCusto = distancia[cidadeAtual][proxCidade];
 				}
-				
+
 				if ((newCusto != 0) && (newCusto < custo)){
 					custo = newCusto;
 					aux = j;
+					demanda = newDemanda;
 				}else if (custo == 0 && newCusto != 0){
 					custo = newCusto;
 					aux = j;
+					demanda = newDemanda;					
+				}else if(newCusto == custo){
+					if (demanda < newDemanda){
+						custo = newCusto;
+						aux = j;
+						demanda = newDemanda;	
+					}
 				}
 			}
 		}
 
-		if (custoFinal+custo < capacidade && custo != 0){
+		if (demandaTotal+demanda < capacidade && demanda != 0){
 			custoFinal += custo;
+			demandaTotal += demanda;
 			printf("Foi %d \n", cidades[aux]);
-			cidades[aux] = (int)NULL;
-  			qsort (cidades, quantCidade-1, sizeof(int), compare);
+			cidades[aux] = 0;
+  			qsort (cidades, quantCidade, sizeof(int), compare);
 		}else{
-			custoFinal += custo;
-			printf("Custo %f \n",custoFinal);
+			printf("Demanda %d - %f \n", demandaTotal, custoFinal);
 			custoFinal = 0;
-		}
-		i--;
+			demandaTotal = 0;
+		}	
 	}
-	printf("Custo %f \n",custoFinal);
+	printf("Demanda %d - %f \n", demandaTotal, custoFinal);
 }
