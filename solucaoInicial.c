@@ -13,13 +13,14 @@ void solucaoInicial(float **distancia, int quantCidade, int capacidade, int *cid
 	  printf( "Erro Malloc Cidade X!\n");
 	  exit(-1);
 	}
-
-	printf("capacidade %d\n", capacidade);
-
+	printf("\nSolucao Inicial\n\n");
+	
 	for (i = 0; i < quantCidade; i++){
 		cidades[i] = i;
 	}
 
+	i = 1;
+	printf("Route #%d: ",i);
 	aux = (int)NULL;
 	while(cidades[quantCidade-1] != 0){
 		newCusto = 0;
@@ -56,14 +57,16 @@ void solucaoInicial(float **distancia, int quantCidade, int capacidade, int *cid
 		if (demandaTotal+demanda < capacidade && demanda != 0){
 			custoFinal += custo;
 			demandaTotal += demanda;
-			printf("Foi %d \n", cidades[aux]);
+			printf("%d ", cidades[aux]);
 			cidades[aux] = 0;
   			qsort (cidades, quantCidade, sizeof(int), compare);
 		}else{
-			printf("Demanda %d - %f \n", demandaTotal, custoFinal);
-			custoFinal = 0;
+			//printf("\nDemanda %d - %f \n", demandaTotal, custoFinal);
+			i++;
+			printf("\nRoute #%d: ",i);
+			//custoFinal = 0;
 			demandaTotal = 0;
 		}	
 	}
-	printf("Demanda %d - %f \n", demandaTotal, custoFinal);
+	printf("\nCost %f \n", custoFinal);
 }
