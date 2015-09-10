@@ -45,7 +45,7 @@ void solucaoInicial(float **distancia, int quantCidade, int capacidade, int *cid
 					aux = j;
 					demanda = newDemanda;					
 				}else if(newCusto == custo){
-					if (demanda < newDemanda){
+					if (demanda > newDemanda){
 						custo = newCusto;
 						aux = j;
 						demanda = newDemanda;	
@@ -58,14 +58,17 @@ void solucaoInicial(float **distancia, int quantCidade, int capacidade, int *cid
 			custoFinal += custo;
 			demandaTotal += demanda;
 			printf("%d ", cidades[aux]);
+			cidadeAtual = cidades[aux];
 			cidades[aux] = 0;
   			qsort (cidades, quantCidade, sizeof(int), compare);
 		}else{
 			//printf("\nDemanda %d - %f \n", demandaTotal, custoFinal);
 			i++;
+			custoFinal += distancia[cidadeAtual][0];
 			printf("\nRoute #%d: ",i);
 			//custoFinal = 0;
 			demandaTotal = 0;
+			cidadeAtual = 0;
 		}	
 	}
 	printf("\nCost %f \n", custoFinal);
