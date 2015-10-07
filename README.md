@@ -8,6 +8,9 @@ $ gcc CVRP.c -o main
 $ ./main
 ```
 
+Repositório com as instancias:
+http://vrp.atd-lab.inf.puc-rio.br/index.php/en/
+
 ```
 Copyright (C) 2015 - Péricles Pinheiro Feltrin
 ```
