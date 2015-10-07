@@ -27,8 +27,8 @@ int main(int argc, char const *argv[]){
 
 	//Nome do Arquivo
 	arquivo = fopen(arq, "r");
-	//arquivo = fopen("E-n22-k4.vrp", "r");
-	//arquivo = fopen("A-n32-k5.vrp", "r");
+	//arquivo = fopen("A-VRP/E-n22-k4.vrp", "r");
+	//arquivo = fopen("A-VRP/A-n32-k5.vrp", "r");
 	if(arquivo == NULL){
 		printf("Erro, nao foi possivel abrir o arquivo %s. \n", arq);
 	}else{
@@ -123,7 +123,10 @@ int main(int argc, char const *argv[]){
 	//Gera a "matriz" com as distâncias
 	calcDistancia(quantCidades, cidadeX, cidadeY, distancia);
 	/*
-	int x[] = {0, 21, 31, 19, 17, 13, 7, 26, 0, 12, 1, 16, 30, 0, 27, 24, 0, 29, 18, 8, 9, 22, 15, 10, 25, 5, 20, 0, 14, 28, 11, 4, 23, 3, 2, 6, 0};
+	
+	//"A-VRP/A-n32-k5.vrp"
+	//int x[] = {0, 21, 31, 19, 17, 13, 7, 26, 0, 12, 1, 16, 30, 0, 27, 24, 0, 29, 18, 8, 9, 22, 15, 10, 25, 5, 20, 0, 14, 28, 11, 4, 23, 3, 2, 6, 0};
+	//"A-VRP/E-n22-k4.vrp"
 	//int x[] = {0, 17, 20, 18, 15, 12, 0, 16, 19, 21, 14, 0, 13, 11, 4, 3, 8, 10, 0, 9, 7, 5, 2, 1, 6, 0};
  	printf("\n\nArquivo\n");
  	imprime(x, quantRotas, cidadeD);
