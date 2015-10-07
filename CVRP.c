@@ -22,13 +22,13 @@ int main(int argc, char const *argv[]){
 	char *token;
 	FILE *arquivo;
 	
-	//printf("Arquivo: ");
-	//scanf("%s", arq);
+	printf("Arquivo: ");
+	scanf("%s", arq);
 
 	//Nome do Arquivo
-	//arquivo = fopen(arq, "r");
+	arquivo = fopen(arq, "r");
 	//arquivo = fopen("E-n22-k4.vrp", "r");
-	arquivo = fopen("A-n32-k5.vrp", "r");
+	//arquivo = fopen("A-n32-k5.vrp", "r");
 	if(arquivo == NULL){
 		printf("Erro, nao foi possivel abrir o arquivo %s. \n", arq);
 	}else{
@@ -122,14 +122,14 @@ int main(int argc, char const *argv[]){
 
 	//Gera a "matriz" com as distâncias
 	calcDistancia(quantCidades, cidadeX, cidadeY, distancia);
-
+	/*
 	int x[] = {0, 21, 31, 19, 17, 13, 7, 26, 0, 12, 1, 16, 30, 0, 27, 24, 0, 29, 18, 8, 9, 22, 15, 10, 25, 5, 20, 0, 14, 28, 11, 4, 23, 3, 2, 6, 0};
 	//int x[] = {0, 17, 20, 18, 15, 12, 0, 16, 19, 21, 14, 0, 13, 11, 4, 3, 8, 10, 0, 9, 7, 5, 2, 1, 6, 0};
  	printf("\n\nArquivo\n");
  	imprime(x, quantRotas, cidadeD);
 	printf("\nResposta Arquivo: %f\n", calcCusto(x, distancia, quantRotas) );
 	//printf("\n %f \n", distancia[20][17] + distancia[20][18] + distancia[18][15] + distancia[15][12] + distancia[19][16] + distancia[21][19] + distancia [21][14] + distancia[13][11] + distancia[11][4] + distancia[4][3] + distancia[8][3] + distancia[10][8] + distancia[9][7] + distancia[7][5] + distancia[5][2] + distancia[2][1] + distancia[6][1] + distancia[17][0] + distancia[12][0] + distancia[16][0] + distancia[14][0] + distancia[13][0] + distancia[10][0] + distancia[9][0] + distancia[6][0]);
-
+*/
 
 
 	//Alocação do vetor das Rotas
@@ -144,7 +144,7 @@ int main(int argc, char const *argv[]){
 	imprime(rotas, quantRotas, cidadeD);
 	printf("\nCost %f \n", calcCusto(rotas, distancia, quantRotas));
 	rotas = ils(distancia, quantCidades, capacidade, cidadeD, rotas, quantRotas);	 
-	for (int i = 0; i < 10000; i++){
+	for (int i = 0; i < 100; i++){
 		novasRotas = perturbacao(distancia, quantCidades, capacidade, cidadeD, rotas, quantRotas);
 	 	//imprime(novasRotas, quantRotas, cidadeD);
 	 	//printf("\nCost %f \n", calcCusto(novasRotas, distancia, quantRotas));
