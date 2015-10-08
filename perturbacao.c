@@ -19,45 +19,40 @@ int* perturbacao(float **distancia, int quantCidade, int capacidade, int *cidade
 	//printf("\nPerturbacao\n");
 
 	for (a = 1; a < quantRotas-1; a++){
-		//if(novasRotas[a] != 0){
-			for (b = a+1; b < quantRotas-1; b++){
-				//if(novasRotas[b] != 0){
-					aux = novasRotas[a];
-					novasRotas[a] = novasRotas[b];
-					novasRotas[b] = aux;
+		for (b = a+1; b < quantRotas-1; b++){
+			aux = novasRotas[a];
+			novasRotas[a] = novasRotas[b];
+			novasRotas[b] = aux;
 
-					//Verificar Capacidade
-					if (custoRota > calcCusto(novasRotas, distancia, quantRotas)){
-						capacidadeRota = 0;
-						for (i = 1; i < quantRotas; i++){
-							if (novasRotas[i] != 0 ){
-								capacidadeRota += cidadeD[novasRotas[i]];
-							}else{
-								capacidadeRota = 0;
-							}
-
-							if (capacidadeRota > capacidade){
-								capacidadeRota = -1;
-								break;
-							}else if (novasRotas[i] == 0 ){
-								capacidadeRota = 0;
-							}
-						}
-						if(capacidadeRota == 0){
-							custoRota = calcCusto(novasRotas, distancia, quantRotas);
-						}else{
-							aux = novasRotas[b];
-							novasRotas[b] = novasRotas[a];
-							novasRotas[a] = aux;
-						}
+			//Verificar Capacidade
+			if (custoRota > calcCusto(novasRotas, distancia, quantRotas)){
+				capacidadeRota = 0;
+				for (i = 0; i < quantRotas; i++){
+					if (novasRotas[i] != 0 ){
+						capacidadeRota += cidadeD[novasRotas[i]];
 					}else{
-						aux = novasRotas[b];
-						novasRotas[b] = novasRotas[a];
-						novasRotas[a] = aux;
+						capacidadeRota = 0;
 					}
-				//}
+
+					if (capacidadeRota > capacidade){
+						capacidadeRota = -1;
+						break;
+					}
+				}
+				if(capacidadeRota == 0){
+					custoRota = calcCusto(novasRotas, distancia, quantRotas);
+					return novasRotas;
+				}else{
+					aux = novasRotas[b];
+					novasRotas[b] = novasRotas[a];
+					novasRotas[a] = aux;
+				}
+			}else{
+				aux = novasRotas[b];
+				novasRotas[b] = novasRotas[a];
+				novasRotas[a] = aux;
 			}
-		//}
+		}
 	}
 
 	return novasRotas;
