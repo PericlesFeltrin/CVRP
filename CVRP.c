@@ -22,13 +22,13 @@ int main(int argc, char const *argv[]){
 	char *token;
 	FILE *arquivo;
 	
-	printf("Arquivo: ");
-	scanf("%s", arq);
+	//printf("Arquivo: ");
+	//scanf("%s", arq);
 
 	//Nome do Arquivo
-	arquivo = fopen(arq, "r");
-	//arquivo = fopen("A-VRP/E-n22-k4.vrp", "r");
+	//arquivo = fopen(arq, "r");
 	//arquivo = fopen("A-VRP/A-n32-k5.vrp", "r");
+	arquivo = fopen("A-VRP/mil.txt", "r");
 	if(arquivo == NULL){
 		printf("Erro, nao foi possivel abrir o arquivo %s. \n", arq);
 	}else{
@@ -142,19 +142,30 @@ int main(int argc, char const *argv[]){
 	  exit(-1);
 	}
 
-
+	float newCost = 0, oldCoast = 0;
+	int i = 0;
 	solucaoInicial(distancia, quantCidades, capacidade, cidadeD, rotas);
 	imprime(rotas, quantRotas, cidadeD);
 	printf("\nCost %f \n", calcCusto(rotas, distancia, quantRotas));
+	newCost = calcCusto(rotas, distancia, quantRotas);
 	rotas = ils(distancia, quantCidades, capacidade, cidadeD, rotas, quantRotas);	 
-	for (int i = 0; i < 100; i++){
+	while(newCost != oldCoast){
+		i++;
+		oldCoast = newCost;
 		novasRotas = perturbacao(distancia, quantCidades, capacidade, cidadeD, rotas, quantRotas);
+		for (int p = 0; p < (quantCidades*10/100); ++p){
+			novasRotas = perturbacao(distancia, quantCidades, capacidade, cidadeD, novasRotas, quantRotas);
+		}
 	 	//imprime(novasRotas, quantRotas, cidadeD);
 	 	//printf("\nCost %f \n", calcCusto(novasRotas, distancia, quantRotas));
 		novasRotas = ils(distancia, quantCidades, capacidade, cidadeD, novasRotas, quantRotas);
 	 	//imprime(novasRotas, quantRotas, cidadeD);
 	 	//printf("\nCost %f \n", calcCusto(novasRotas, distancia, quantRotas));	 	
 		rotas = criterioDeAceitacao(rotas, novasRotas, distancia, quantRotas);
+		newCost = calcCusto(rotas, distancia, quantRotas);
+		if(i%10 == 0){
+			printf("X %d X %f X \n",i, newCost);
+		}
 	}
 	printf("\nFinal\n");
 	imprime(rotas, quantRotas, cidadeD);
