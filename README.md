@@ -11,6 +11,8 @@ $ ./main
 Repositório com as instancias:
 http://vrp.atd-lab.inf.puc-rio.br/index.php/en/
 
+Obs.: Somente para arquivos no padrão EUC_2D
+
 ```
 Copyright (C) 2015 - Péricles Pinheiro Feltrin
 ```
