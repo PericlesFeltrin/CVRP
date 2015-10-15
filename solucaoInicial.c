@@ -1,9 +1,5 @@
-int compare (const void * a, const void * b){
-  return ( *(int*)a - *(int*)b );
-}
-
 void solucaoInicial(float **distancia, int quantCidade, int capacidade, int *cidadeD, int *rotas){
-	int *cidades, cidadeAtual = 0, proxCidade, i, j, aux, newDemanda, demanda, demandaTotal = 0, index = 1;
+	int *cidades, cidadeAtual = 0, proxCidade, i, j, aux, newDemanda, demanda, demandaTotal = 0, index = 1, w = 0;
 	float custo = 0, newCusto;
 	
 	cidades = malloc((quantCidade-1) * sizeof(int));
@@ -18,11 +14,11 @@ void solucaoInicial(float **distancia, int quantCidade, int capacidade, int *cid
 	}
 
 	rotas[0] = 0;
-	aux = (int)NULL;
-	while(cidades[quantCidade-1] != 0){
+	while(quantCidade-1 != w){
 		newCusto = 0;
 		custo = 0;
 		demanda = 0;
+		aux = 0;
 		for (j = 0; j < quantCidade; j++){
 			proxCidade = cidades[j];
 			newDemanda = cidadeD[proxCidade];
@@ -42,7 +38,7 @@ void solucaoInicial(float **distancia, int quantCidade, int capacidade, int *cid
 					aux = j;
 					demanda = newDemanda;					
 				}else if(newCusto == custo){
-					if (demanda > newDemanda){
+					if (demanda < newDemanda){
 						custo = newCusto;
 						aux = j;
 						demanda = newDemanda;	
@@ -57,8 +53,8 @@ void solucaoInicial(float **distancia, int quantCidade, int capacidade, int *cid
 			index++;
 			cidadeAtual = cidades[aux];
 			cidades[aux] = 0;
-  			qsort (cidades, quantCidade, sizeof(int), compare);
-		}else{
+  			w++;
+  		}else{
 			rotas[index] = 0;
 			index++;
 			demandaTotal = 0;

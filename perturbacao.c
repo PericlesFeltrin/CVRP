@@ -41,7 +41,7 @@ int* perturbacao(float **distancia, int quantCidade, int capacidade, int *cidade
 				}
 				if(capacidadeRota == 0){
 					custoRota = calcCusto(novasRotas, distancia, quantRotas);
-					return novasRotas;
+					//return novasRotas;
 				}else{
 					aux = novasRotas[b];
 					novasRotas[b] = novasRotas[a];

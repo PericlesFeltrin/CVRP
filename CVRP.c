@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h> 
+#include <time.h>
 
 //#include "arquivo.c"
 #include "calcDistancia.c"
@@ -22,13 +23,14 @@ int main(int argc, char const *argv[]){
 	char *token;
 	FILE *arquivo;
 	
-	//printf("Arquivo: ");
-	//scanf("%s", arq);
+	printf("Arquivo: ");
+	scanf("%s", arq);
 
 	//Nome do Arquivo
-	//arquivo = fopen(arq, "r");
+	arquivo = fopen(arq, "r");
 	//arquivo = fopen("A-VRP/A-n32-k5.vrp", "r");
-	arquivo = fopen("A-VRP/mil.txt", "r");
+	//arquivo = fopen("A-VRP/A-n53-k7.vrp", "r");
+	//arquivo = fopen("A-VRP/mil.vrp", "r");
 	if(arquivo == NULL){
 		printf("Erro, nao foi possivel abrir o arquivo %s. \n", arq);
 	}else{
@@ -153,9 +155,9 @@ int main(int argc, char const *argv[]){
 		i++;
 		oldCoast = newCost;
 		novasRotas = perturbacao(distancia, quantCidades, capacidade, cidadeD, rotas, quantRotas);
-		for (int p = 0; p < (quantCidades*10/100); ++p){
+		/*for (int p = 0; p < (quantCidades*30/100); ++p){
 			novasRotas = perturbacao(distancia, quantCidades, capacidade, cidadeD, novasRotas, quantRotas);
-		}
+		}*/
 	 	//imprime(novasRotas, quantRotas, cidadeD);
 	 	//printf("\nCost %f \n", calcCusto(novasRotas, distancia, quantRotas));
 		novasRotas = ils(distancia, quantCidades, capacidade, cidadeD, novasRotas, quantRotas);
@@ -163,6 +165,7 @@ int main(int argc, char const *argv[]){
 	 	//printf("\nCost %f \n", calcCusto(novasRotas, distancia, quantRotas));	 	
 		rotas = criterioDeAceitacao(rotas, novasRotas, distancia, quantRotas);
 		newCost = calcCusto(rotas, distancia, quantRotas);
+		printf("%d \n", i );
 		if(i%10 == 0){
 			printf("X %d X %f X \n",i, newCost);
 		}
