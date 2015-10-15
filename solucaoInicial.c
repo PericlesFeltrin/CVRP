@@ -37,12 +37,10 @@ void solucaoInicial(float **distancia, int quantCidade, int capacidade, int *cid
 					custo = newCusto;
 					aux = j;
 					demanda = newDemanda;					
-				}else if(newCusto == custo){
-					if (demanda < newDemanda){
+				}else if((newCusto == custo) && (demanda < newDemanda)){
 						custo = newCusto;
 						aux = j;
 						demanda = newDemanda;	
-					}
 				}
 			}
 		}
