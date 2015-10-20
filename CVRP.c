@@ -23,14 +23,17 @@ int main(int argc, char const *argv[]){
 	char *token;
 	FILE *arquivo;
 	
-	printf("Arquivo: ");
-	scanf("%s", arq);
+	//printf("Arquivo: ");
+	//scanf("%s", arq);
 
 	//Nome do Arquivo
-	arquivo = fopen(arq, "r");
+	//arquivo = fopen(arq, "r");
 	//arquivo = fopen("A-VRP/A-n32-k5.vrp", "r");
+	//arquivo = fopen("A-VRP/A-n44-k7.vrp", "r");
 	//arquivo = fopen("A-VRP/A-n53-k7.vrp", "r");
-	//arquivo = fopen("A-VRP/mil.vrp", "r");
+	//arquivo = fopen("A-VRP/A-n63-k9.vrp", "r");
+	//arquivo = fopen("A-VRP/A-n80-k10.vrp", "r");
+	arquivo = fopen("A-VRP/mil.vrp", "r");
 	if(arquivo == NULL){
 		printf("Erro, nao foi possivel abrir o arquivo %s. \n", arq);
 	}else{
@@ -155,7 +158,7 @@ int main(int argc, char const *argv[]){
 		i++;
 		oldCoast = newCost;
 		novasRotas = perturbacao(distancia, quantCidades, capacidade, cidadeD, rotas, quantRotas);
-		/*for (int p = 0; p < (quantCidades*30/100); ++p){
+		/*for (int p = 0; p < (quantCidades*10/100); ++p){
 			novasRotas = perturbacao(distancia, quantCidades, capacidade, cidadeD, novasRotas, quantRotas);
 		}*/
 	 	//imprime(novasRotas, quantRotas, cidadeD);
