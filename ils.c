@@ -10,6 +10,8 @@ int* ils(float **distancia, int quantCidade, int capacidade, int *cidadeD, int *
 	}
 
 	//copia vetor com as rotas
+	//Esse acho que não deu
+	#pragma acc kernels loop
 	for (i = 0; i < quantRotas; ++i){
 		novasRotas[i] = rotas[i];
 	}
@@ -20,12 +22,14 @@ int* ils(float **distancia, int quantCidade, int capacidade, int *cidadeD, int *
 		if(rotas[x] == 0){
 			for (y = x+1; rotas[y] != 0; y++){
 				for (z = y+1; rotas[z] != 0; z++){
+					//#pragma acc kernels loop
 					for (i = y, w = z; i < w; i++, w--){
 						aux = novasRotas[i];
 						novasRotas[i] = novasRotas[w];
 						novasRotas[w] = aux;
 					}
 					if (custoRota < calcCusto(novasRotas, distancia, quantRotas)){
+						//#pragma acc kernels loop
 						for (i = y, w = z; i < w; i++, w--){
 							aux = novasRotas[i];
 							novasRotas[i] = novasRotas[w];

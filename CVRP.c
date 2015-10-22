@@ -3,20 +3,21 @@
 #include <string.h>
 #include <math.h> 
 #include <time.h>
+#include <openacc.h>
+//pgcc -acc -Minfo=accel -fast CVRP.c
 
-//#include "arquivo.c"
 #include "calcDistancia.c"
 #include "calcCusto.c"
 #include "solucaoInicial.c"
 #include "criterioDeAceitacao.c"
 #include "perturbacao.c"
 #include "imprime.c"
-#include "ILS.c"
+#include "ils.c"
 
 
-int main(int argc, char const *argv[]){
+int main(int argc, char* argv[]){
 	int *cidadeX, *cidadeY, *cidadeD, *rotas, *novasRotas, demandaTotal = 0, capacidade, quantCidades;
-	int tamLinha = 100, iLinha = 0;
+	int tamLinha = 100, iLinha = 0, i;
 	float **distancia;
 	char arq[50];
 	char linha[tamLinha];
@@ -44,7 +45,7 @@ int main(int argc, char const *argv[]){
 				token = strtok(linha," ");
 				token = strtok (NULL, " ");
 				token = strtok (NULL, " ");
-					quantCidades = atoi(token);
+				quantCidades = atoi(token);
 				printf("Quantidade de Cidades: %d \n", quantCidades);
 				//Alocação do vetor da posição X da cidade
 				cidadeX = malloc((quantCidades) * sizeof(int));
@@ -66,7 +67,8 @@ int main(int argc, char const *argv[]){
 				}
 				//Alocação do vetor de distancias
 				distancia = malloc((quantCidades) * sizeof(float *));
-				for (int i = 0; i < quantCidades; ++i){
+				#pragma acc kernels loop
+				for (i = 0; i < quantCidades; ++i){
 					distancia[i] = malloc((i) * sizeof(float *));
 				}
 				if (distancia == NULL) {
@@ -148,7 +150,7 @@ int main(int argc, char const *argv[]){
 	}
 
 	float newCost = 0, oldCoast = 0;
-	int i = 0;
+	i = 0;
 	solucaoInicial(distancia, quantCidades, capacidade, cidadeD, rotas);
 	imprime(rotas, quantRotas, cidadeD);
 	printf("\nCost %f \n", calcCusto(rotas, distancia, quantRotas));

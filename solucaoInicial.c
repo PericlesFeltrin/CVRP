@@ -9,6 +9,7 @@ void solucaoInicial(float **distancia, int quantCidade, int capacidade, int *cid
 	}
 	printf("\nSolucao Inicial\n");
 	
+	#pragma acc kernels loop
 	for (i = 0; i < quantCidade; i++){
 		cidades[i] = i;
 	}

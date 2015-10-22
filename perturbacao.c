@@ -11,6 +11,8 @@ int* perturbacao(float **distancia, int quantCidade, int capacidade, int *cidade
 	}
 
 	//copia vetor com as rotas
+	//Esse acho que não deu
+	#pragma acc kernels loop
 	for (i = 0; i < quantRotas; ++i){
 		novasRotas[i] = rotas[i];
 	}
@@ -27,14 +29,19 @@ int* perturbacao(float **distancia, int quantCidade, int capacidade, int *cidade
 			//Verificar Capacidade
 			if (custoRota > calcCusto(novasRotas, distancia, quantRotas)){
 				capacidadeRota = 0;
+
+				//#pragma acc kernels loop
 				for (i = 0; i < quantRotas; i++){
 					if (novasRotas[i] != 0 ){
+				//		#pragma acc atomic update
 						capacidadeRota += cidadeD[novasRotas[i]];
 					}else{
+				//		#pragma acc atomic update
 						capacidadeRota = 0;
 					}
 
 					if (capacidadeRota > capacidade){
+				//		#pragma acc atomic update
 						capacidadeRota = -1;
 						break;
 					}
