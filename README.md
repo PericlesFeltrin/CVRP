@@ -13,7 +13,7 @@ Antes de iniciar siga os passos os seguintes passos para instalar o [OpenACC](ht
 $ gcc CVRP.c -o sequencial -std=c99 -lm
 $ ./sequencial
 ```
-Obs.: Algoritmo sequencial.
+Obs.: Algoritmo será executado sequencialmente.
 
 ##### Para compilar na GPU com OpenACC use pgcc:
 ```
