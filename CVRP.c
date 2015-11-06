@@ -174,7 +174,7 @@ int main(int argc, char* argv[]){
 	double valor, inteiro, fracionario;
 	valor = (double)demandaTotal/(double)capacidade;
 	fracionario = modf(valor , &inteiro);
-	if(fracionario > 0.50){
+	if(fracionario > 0.80){
 		quantRotas +=1;
 	}
 	/*
@@ -253,7 +253,7 @@ int main(int argc, char* argv[]){
     	usec += 1000000L;
     	sec -= 1;
 	}
-    printf("Tempo: %d s %d us\n", sec, usec);
+    printf("Tempo de execucao: %d s %d us\n", sec, usec);
 	free(cidadeX);
 	free(cidadeY);
 	free(cidadeD);
