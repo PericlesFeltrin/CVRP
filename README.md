@@ -10,15 +10,17 @@ Antes de iniciar siga os passos os seguintes passos para instalar o [OpenACC](ht
 
 ##### Para compilar na CPU use o gcc:
 ```
-$ gcc CVRP.c -o main -std=c99 -lm
-$ ./main
+$ gcc CVRP.c -o sequencial -std=c99 -lm
+$ ./sequencial
 ```
+Obs.: Algoritmo sequencial.
 
 ##### Para compilar na GPU com OpenACC use pgcc:
 ```
-$ pgcc -acc -Minfo=all CVRP.c
-$ ./a.out
+$ pgcc -acc -Minfo=all CVRP.c -o paralelo
+$ ./paralelo
 ```
+Obs.: Algoritmo será executado em paralelo na GPU.
 
 ##### Para limpar a memória cache no Linux.
 ```
