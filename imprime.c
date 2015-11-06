@@ -1,18 +1,35 @@
+/*
+ * Impressão na tela dos resultados obtidos.
+ * Imprime no formado especificado pelo TSPLIB 95.
+ */
 void imprime(int *rotas, int quantRotas, int *cidadeD){
  	int y = 1, i=0;
  	int demanda = 0;
  	printf("Route #1: ");
- 	printf("%d ", rotas[i]);
+ 	/*
+ 	* Para vizualizar o depósito na impressão descomente.
+ 	* printf("%d ", rotas[i]);
+ 	*/
  	for (i = 1; i < quantRotas-1; ++i){
  		if(rotas[i] != 0){
  			printf("%d ", rotas[i]);
- 			demanda += cidadeD[rotas[i]];
+			demanda += cidadeD[rotas[i]];
  		}else{
  			y++;
- 			printf(" - Demanda: %d\nRoute #%d: ",demanda, y);
- 			printf("%d ", rotas[i]);
  			demanda = 0;
- 		}
+		 	/*
+		 	 * Para verificar a demanda da rota descomente.
+ 			 * printf(" - Demanda: %d", demanda);
+ 			 */
+ 			 printf("\nRoute #%d: ", y);
+ 			 /*
+ 			  * Para vizualizar o depósito na impressão descomente.
+ 			  * printf("%d ", rotas[i]);
+ 			  */
+ 		} 
  	}
- 	printf(" - Demanda: %d",demanda);
+ 	/*
+ 	 * Para verificar a demanda da rota descomente.
+ 	 * printf(" - Demanda: %d",demanda);
+	 */
 }

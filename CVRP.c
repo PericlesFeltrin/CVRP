@@ -3,8 +3,6 @@
 #include <string.h>
 #include <math.h> 
 #include <sys/time.h>
-
-
 /*
  * Funções utilizadas durante o código.
  * O nome do arquivo é o mesmo nome da função.
@@ -17,7 +15,6 @@
 #include "imprime.c"
 #include "buscaLocal.c"
 
-
 int main(int argc, char* argv[]){
 	int *cidadeX, *cidadeY, *cidadeD, *rotas, *novasRotas, demandaTotal = 0, capacidade, quantCidades, depositoCentral;
 	int tamLinha = 100, iLinha = 0, i;
@@ -26,21 +23,17 @@ int main(int argc, char* argv[]){
 	char linha[tamLinha];
 	char *token;
 	FILE *arquivo;
-
 	struct timeval tpI, tpF;
     int sec, usec;
-
 /*
  * INICIO LEITURA DO ARQUIVO
  */
-
  	printf("Arquivos disponiveis: \n");
  	system("ls A-VRP/");
  	printf("\nEx.: A-VRP/A-n32-k5.vrp\n\n");
 	printf("Arquivo: ");
 	scanf("%s", arq);
 	arquivo = fopen(arq, "r");
-	
 	/*
 	 * Pode-se utilizar a entrada de dados estática.
 	 * arquivo = fopen("A-VRP/A-n32-k5.vrp", "r");
@@ -50,12 +43,10 @@ int main(int argc, char* argv[]){
 	 * arquivo = fopen("A-VRP/A-n80-k10.vrp", "r");
 	 * arquivo = fopen("A-VRP/X-n1001-k43.vrp", "r");
 	 */
-
 	/*
 	 * Tempo Inicial
 	 */
 	gettimeofday(&tpI,NULL);
-
 	if(arquivo == NULL){
 		printf("Erro, nao foi possivel abrir o arquivo. \n");
 	}else{
@@ -167,12 +158,9 @@ int main(int argc, char* argv[]){
 		}
 	}	
 	fclose(arquivo);
-
 /*
  * FIM LEITURA DO ARQUIVO
  */
-
-
 	printf("Demanda Total: %d \n",demandaTotal);
 	/*
 	 * Cálculo que irá definir o mínimo de rotas necessárias para resolver o problema.
@@ -183,7 +171,6 @@ int main(int argc, char* argv[]){
 	 * Cálculo que irá definir o tamanho do vetor que irá armazenar a resposta (rotas) 
 	 */
 	int quantRotas = quantCidades+minimo;
-	
 	double valor, inteiro, fracionario;
 	valor = (double)demandaTotal/(double)capacidade;
 	fracionario = modf(valor , &inteiro);
@@ -203,14 +190,13 @@ int main(int argc, char* argv[]){
 	 */
 	calcDistancia(quantCidades, cidadeX, cidadeY, distancia);
 	/*
-	 * Alocação do vetor que irá conter a resposta (rotas) do problema.
+	 * Alocação do vetor que irá conter a resposta (novasRotas) do problema.
 	 */
 	novasRotas = malloc((quantRotas) * sizeof(int));
 	if (novasRotas == NULL) {
 	  printf( "Erro Malloc novasRotas!\n");
 	  exit(-1);
 	}
-
 	float newCost = 0, oldCoast = 0;
 	/*
 	 * Geração da solução inicial.
@@ -257,7 +243,6 @@ int main(int argc, char* argv[]){
 	printf("\nResultado Final\n");
 	imprime(rotas, quantRotas, cidadeD);
 	printf("\nCost %f \n", calcCusto(rotas, distancia, quantRotas));
-	
 	/*
 	 * Tempo Final
 	 */
@@ -269,11 +254,9 @@ int main(int argc, char* argv[]){
     	sec -= 1;
 	}
     printf("Tempo: %d s %d us\n", sec, usec);
-
 	free(cidadeX);
 	free(cidadeY);
 	free(cidadeD);
 	free(distancia);
-
 	return 0;
 }
