@@ -1,5 +1,7 @@
-
-int* perturbacao(float **distancia, int quantCidade, int capacidade, int *cidadeD, int *rotas, int quantRotas){
+/*
+ * Perturbação realizada por trocas.
+ */
+int* perturbacao(float **distancia, int quantCidade, int capacidade, int *cidadeD, int *rotas, int quantRotas, int depositoCentral){
 	int *novasRotas, i, a, b, aux, capacidadeRota;
 	float custoRota;
 
@@ -9,10 +11,7 @@ int* perturbacao(float **distancia, int quantCidade, int capacidade, int *cidade
 	  printf( "Erro Malloc novasRotas!\n");
 	  exit(-1);
 	}
-
-	//copia vetor com as rotas
-	//Esse acho que não deu
-	#pragma acc kernels loop
+	
 	for (i = 0; i < quantRotas; ++i){
 		novasRotas[i] = rotas[i];
 	}
@@ -32,7 +31,7 @@ int* perturbacao(float **distancia, int quantCidade, int capacidade, int *cidade
 
 				//#pragma acc kernels loop
 				for (i = 0; i < quantRotas; i++){
-					if (novasRotas[i] != 0 ){
+					if (novasRotas[i] != depositoCentral ){
 				//		#pragma acc atomic update
 						capacidadeRota += cidadeD[novasRotas[i]];
 					}else{
@@ -48,7 +47,6 @@ int* perturbacao(float **distancia, int quantCidade, int capacidade, int *cidade
 				}
 				if(capacidadeRota == 0){
 					custoRota = calcCusto(novasRotas, distancia, quantRotas);
-					//return novasRotas;
 				}else{
 					aux = novasRotas[b];
 					novasRotas[b] = novasRotas[a];

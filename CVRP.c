@@ -2,72 +2,103 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h> 
-#include <time.h>
-#include <openacc.h>
-//pgcc -acc -Minfo=accel -fast CVRP.c
+#include <sys/time.h>
 
+
+/*
+ * Funções utilizadas durante o código.
+ * O nome do arquivo é o mesmo nome da função.
+ */
 #include "calcDistancia.c"
 #include "calcCusto.c"
 #include "solucaoInicial.c"
 #include "criterioDeAceitacao.c"
 #include "perturbacao.c"
 #include "imprime.c"
-#include "ils.c"
+#include "buscaLocal.c"
 
 
 int main(int argc, char* argv[]){
-	int *cidadeX, *cidadeY, *cidadeD, *rotas, *novasRotas, demandaTotal = 0, capacidade, quantCidades;
+	int *cidadeX, *cidadeY, *cidadeD, *rotas, *novasRotas, demandaTotal = 0, capacidade, quantCidades, depositoCentral;
 	int tamLinha = 100, iLinha = 0, i;
 	float **distancia;
 	char arq[50];
 	char linha[tamLinha];
 	char *token;
 	FILE *arquivo;
-	
-	//printf("Arquivo: ");
-	//scanf("%s", arq);
 
-	//Nome do Arquivo
-	//arquivo = fopen(arq, "r");
-	//arquivo = fopen("A-VRP/A-n32-k5.vrp", "r");
-	//arquivo = fopen("A-VRP/A-n44-k7.vrp", "r");
-	//arquivo = fopen("A-VRP/A-n53-k7.vrp", "r");
-	//arquivo = fopen("A-VRP/A-n63-k9.vrp", "r");
-	//arquivo = fopen("A-VRP/A-n80-k10.vrp", "r");
-	arquivo = fopen("A-VRP/mil.vrp", "r");
+	struct timeval tpI, tpF;
+    int sec, usec;
+
+/*
+ * INICIO LEITURA DO ARQUIVO
+ */
+
+ 	printf("Arquivos disponiveis: \n");
+ 	system("ls A-VRP/");
+ 	printf("\nEx.: A-VRP/A-n32-k5.vrp\n\n");
+	printf("Arquivo: ");
+	scanf("%s", arq);
+	arquivo = fopen(arq, "r");
+	
+	/*
+	 * Pode-se utilizar a entrada de dados estática.
+	 * arquivo = fopen("A-VRP/A-n32-k5.vrp", "r");
+	 * arquivo = fopen("A-VRP/A-n44-k7.vrp", "r");
+	 * arquivo = fopen("A-VRP/A-n53-k7.vrp", "r");
+	 * arquivo = fopen("A-VRP/A-n63-k9.vrp", "r");
+	 * arquivo = fopen("A-VRP/A-n80-k10.vrp", "r");
+	 * arquivo = fopen("A-VRP/X-n1001-k43.vrp", "r");
+	 */
+
+	/*
+	 * Tempo Inicial
+	 */
+	gettimeofday(&tpI,NULL);
+
 	if(arquivo == NULL){
-		printf("Erro, nao foi possivel abrir o arquivo %s. \n", arq);
+		printf("Erro, nao foi possivel abrir o arquivo. \n");
 	}else{
 		while(!feof(arquivo)){
 			fgets(linha, tamLinha , arquivo);
 			if (iLinha == 3){ 
-				//Quantidade de Cidades/Instancias
+				/*
+ 				 * Encontrado a quantidade de cidades/instancias no arquivo
+				 */
 				token = strtok(linha," ");
 				token = strtok (NULL, " ");
 				token = strtok (NULL, " ");
 				quantCidades = atoi(token);
 				printf("Quantidade de Cidades: %d \n", quantCidades);
-				//Alocação do vetor da posição X da cidade
+				/*
+				 * Alocação do vetor que irá conter o ponto x de cada cidade.  
+				 */
 				cidadeX = malloc((quantCidades) * sizeof(int));
 				if (cidadeX == NULL) {
 				  printf( "Erro Malloc Cidade X!\n");
 				  exit(-1);
 				}
-				//Alocação do vetor da posição Y da cidade
+				/*
+				 * Alocação do vetor que irá conter o ponto y de cada cidade.  
+				 */
 				cidadeY = malloc((quantCidades) * sizeof(int));
 				if (cidadeY == NULL) {
 				  printf( "Erro Malloc Cidade Y!\n");
 				  exit(-1);
 				}
-				//Alocação do vetor das Demandas
+				/*
+				 * Alocação do vetor que irá conter a demanda de cada cidade.  
+				 */
 				cidadeD = malloc((quantCidades) * sizeof(int));
 				if (cidadeD == NULL) {
 				  printf( "Erro Malloc Demanda!\n");
 				  exit(-1);
 				}
-				//Alocação do vetor de distancias
+				/*
+				 * Alocação da matriz triangular inferior de distancias.  
+				 */
 				distancia = malloc((quantCidades) * sizeof(float *));
-				#pragma acc kernels loop
+				#pragma acc kernels
 				for (i = 0; i < quantCidades; ++i){
 					distancia[i] = malloc((i) * sizeof(float *));
 				}
@@ -76,73 +107,101 @@ int main(int argc, char* argv[]){
 				  exit(-1);
 				}
 			}else if (iLinha == 5){ 
-				//Capacidade do veículo
+				/*
+ 				 * Encontrado a capacidade de cada veículo no arquivo
+				 */
 				token = strtok(linha," ");
 				token = strtok (NULL, " ");
 				token = strtok (NULL, " ");
 				capacidade = atoi(token);
 				printf("Capacidade: %d \n", capacidade);
 			}else if (iLinha > 6 && iLinha <= 6+quantCidades){
-				//Cidade X Y
+				/*
+ 				 * Encontrado a cidade com seu respectivo ponto x e y no plano.
+				 */
 				int cidade;
-				//Pega a Cidade
+				/*
+				 * Encontrada a cidade.  
+				 */
 				token = strtok(linha," ");
 				cidade = atoi(token);
-				//printf("Cidade: %d ", atoi(token));
-				//Pega o X
+				/*
+				 * Encontrado o ponto x.  
+				 */
 				token = strtok (NULL, " ");
 				cidadeX[cidade - 1] = atoi(token);
-				//printf("X: %d ", atoi(token));
-				//Pega o Y
+				/*
+				 * Encontrado o ponto y.  
+				 */
 				token = strtok (NULL, " ");
 				cidadeY[cidade - 1] = atoi(token);
-				//printf("Y: %d \n", atoi(token));
 			}else if (iLinha > (7+quantCidades) && iLinha <= (7+quantCidades*2)){
-				//Cidade Demanda
+				/*
+ 				 * Encontrado a cidade com a sua respectiva demanda.
+				 */
 				int cidade;
-				//Pega a Cidade
+				/*
+				 * Encontrada a cidade.  
+				 */
 				token = strtok(linha," ");
 				cidade = atoi(token);
-				//printf("Cidade: %s ", token);
-				//Pega a Demanda
+				/*
+				 * Encontrada a demanda.  
+				 */
 				token = strtok (NULL, " ");
 				cidadeD[cidade - 1] = atoi(token);
-				//printf("Demanda: %s \n", token);
+				/* 
+				 * Soma-se essa demanda na demanta total do problema.
+				 */
 				demandaTotal += atoi(token);
+			}else if ( iLinha == (7+quantCidades*2+2)){
+				/*
+				 * Encontrado a cidade que é o depósito central do problema.  
+				 */
+				token = strtok(linha," ");
+				depositoCentral = atoi(token)-1;
+				printf("Deposito Central: %d\n",depositoCentral);
+				break;
 			}
 			iLinha++;
 		}
 	}	
 	fclose(arquivo);
 
+/*
+ * FIM LEITURA DO ARQUIVO
+ */
+
+
 	printf("Demanda Total: %d \n",demandaTotal);
+	/*
+	 * Cálculo que irá definir o mínimo de rotas necessárias para resolver o problema.
+	 */
 	int minimo = ceil((float)demandaTotal/(float)capacidade);
 	printf("Minimo de Veículos: %d \n", minimo);
+	/*
+	 * Cálculo que irá definir o tamanho do vetor que irá armazenar a resposta (rotas) 
+	 */
 	int quantRotas = quantCidades+minimo;
-	//Alocação do vetor das Rotas
+	if(demandaTotal%capacidade > 50){
+		printf("dsadasds %d \n", quantRotas);
+		quantRotas +=1;
+	}
+	/*
+	 * Alocação do vetor que irá conter a resposta (rotas) do problema.
+	 */
 	rotas = malloc((quantRotas) * sizeof(int));
 	if (rotas == NULL) {
 	  printf( "Erro Malloc Rotas!\n");
 	  exit(-1);
 	}
-
-
-	//Gera a "matriz" com as distâncias
+	/*
+	 * Chamada ao cálculo que irá preencher a matris triangular inferior.
+	 */
 	calcDistancia(quantCidades, cidadeX, cidadeY, distancia);
 	/*
-	
-	//"A-VRP/A-n32-k5.vrp"
-	//int x[] = {0, 21, 31, 19, 17, 13, 7, 26, 0, 12, 1, 16, 30, 0, 27, 24, 0, 29, 18, 8, 9, 22, 15, 10, 25, 5, 20, 0, 14, 28, 11, 4, 23, 3, 2, 6, 0};
-	//"A-VRP/E-n22-k4.vrp"
-	//int x[] = {0, 17, 20, 18, 15, 12, 0, 16, 19, 21, 14, 0, 13, 11, 4, 3, 8, 10, 0, 9, 7, 5, 2, 1, 6, 0};
- 	printf("\n\nArquivo\n");
- 	imprime(x, quantRotas, cidadeD);
-	printf("\nResposta Arquivo: %f\n", calcCusto(x, distancia, quantRotas) );
-	//printf("\n %f \n", distancia[20][17] + distancia[20][18] + distancia[18][15] + distancia[15][12] + distancia[19][16] + distancia[21][19] + distancia [21][14] + distancia[13][11] + distancia[11][4] + distancia[4][3] + distancia[8][3] + distancia[10][8] + distancia[9][7] + distancia[7][5] + distancia[5][2] + distancia[2][1] + distancia[6][1] + distancia[17][0] + distancia[12][0] + distancia[16][0] + distancia[14][0] + distancia[13][0] + distancia[10][0] + distancia[9][0] + distancia[6][0]);
-*/
-
-
-	//Alocação do vetor das Rotas
+	 * Alocação do vetor que irá conter a resposta (rotas) do problema.
+	 */
 	novasRotas = malloc((quantRotas) * sizeof(int));
 	if (novasRotas == NULL) {
 	  printf( "Erro Malloc novasRotas!\n");
@@ -150,44 +209,63 @@ int main(int argc, char* argv[]){
 	}
 
 	float newCost = 0, oldCoast = 0;
-	i = 0;
-	solucaoInicial(distancia, quantCidades, capacidade, cidadeD, rotas);
-	imprime(rotas, quantRotas, cidadeD);
-	printf("\nCost %f \n", calcCusto(rotas, distancia, quantRotas));
-	newCost = calcCusto(rotas, distancia, quantRotas);
-	rotas = ils(distancia, quantCidades, capacidade, cidadeD, rotas, quantRotas);	 
-	while(newCost != oldCoast){
-		i++;
-		oldCoast = newCost;
-		novasRotas = perturbacao(distancia, quantCidades, capacidade, cidadeD, rotas, quantRotas);
-		/*for (int p = 0; p < (quantCidades*10/100); ++p){
-			novasRotas = perturbacao(distancia, quantCidades, capacidade, cidadeD, novasRotas, quantRotas);
-		}*/
-	 	//imprime(novasRotas, quantRotas, cidadeD);
-	 	//printf("\nCost %f \n", calcCusto(novasRotas, distancia, quantRotas));
-		novasRotas = ils(distancia, quantCidades, capacidade, cidadeD, novasRotas, quantRotas);
-	 	//imprime(novasRotas, quantRotas, cidadeD);
-	 	//printf("\nCost %f \n", calcCusto(novasRotas, distancia, quantRotas));	 	
-		rotas = criterioDeAceitacao(rotas, novasRotas, distancia, quantRotas);
-		newCost = calcCusto(rotas, distancia, quantRotas);
-		printf("%d \n", i );
-		if(i%10 == 0){
-			printf("X %d X %f X \n",i, newCost);
-		}
-	}
-	printf("\nFinal\n");
-	imprime(rotas, quantRotas, cidadeD);
-	printf("\nCost %f \n", calcCusto(rotas, distancia, quantRotas));
-
 	/*
-	s = solucaoInicial(S);
-	s1 = ILS(s);
-	while(){
-		p = perturbacao(s1);
-		p1 = ILS(p1); //2-OPT no ciclo 0-0
-		s1 = criterioDeAceitacao(s1, p1);
+	 * Geração da solução inicial.
+	 */
+	solucaoInicial(distancia, quantCidades, capacidade, cidadeD, rotas, depositoCentral);
+	/*
+	 * Se quiser visualizar a solução incial encontrada é só descomentar as próximas duas linhas de código.
+	 * imprime(rotas, quantRotas, cidadeD);
+	 * printf("\nCost %f \n", calcCusto(rotas, distancia, quantRotas));
+	 */
+	/*
+	 * Cálculo do custo da solução encontrada e armazenada na variável rotas.
+	 */
+	newCost = calcCusto(rotas, distancia, quantRotas);
+	/*
+	 * Aplica-se a busca local na variável rotas.
+	 */
+	rotas = buscaLocal(distancia, quantCidades, capacidade, cidadeD, rotas, quantRotas, depositoCentral);	 
+	while(newCost != oldCoast){
+		/*
+		 * Atualizando variável para critério de parada.
+		 */
+		oldCoast = newCost;
+		/*
+		 * Aplica-se a perturbação na variável rotas.
+		 */
+		novasRotas = perturbacao(distancia, quantCidades, capacidade, cidadeD, rotas, quantRotas, depositoCentral);
+		/*
+		 * Aplica-se a busca local na variável novasRotas.
+		 */
+		novasRotas = buscaLocal(distancia, quantCidades, capacidade, cidadeD, novasRotas, quantRotas, depositoCentral);
+		/*
+		 * Aplica-se o critério de aceitação nas variáveis rotas e novasRotas.
+		 */
+		rotas = criterioDeAceitacao(rotas, novasRotas, distancia, quantRotas);
+		/*
+		 * Cálculo do custo da solução encontrada e armazenada na variável rotas.
+		 */
+		newCost = calcCusto(rotas, distancia, quantRotas);
 	}
-	*/
+	/*
+	 * Imprime resultado final, suas rotas e seu custo total.
+	 */
+	printf("\nResultado Final\n");
+	imprime(rotas, quantRotas, cidadeD);
+	printf("\nCost %f \n", calcCusto(rotas, distancia, quantRotas));
+	
+	/*
+	 * Tempo Final
+	 */
+	gettimeofday(&tpF, NULL);
+	sec = tpF.tv_sec - tpI.tv_sec;
+	usec = tpF.tv_usec - tpI.tv_usec;
+    if (usec<0){
+    	usec += 1000000L;
+    	sec -= 1;
+	}
+    printf("Tempo: %d s %d us\n", sec, usec);
 
 	free(cidadeX);
 	free(cidadeY);

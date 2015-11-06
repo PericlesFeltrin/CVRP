@@ -2,23 +2,34 @@
 #### PRVC - Problema de Roteamento de Veículos Capacitados
 Problema de Roteamento de Veículos Capacitados com custos simétricos. 
 
-Para gerar uma solução Sequencial para o problema use:
+### Install OpenACC
+Antes de iniciar siga os passos os seguintes passos para instalar o [OpenACC](http://www.openacc.org/) e o compilador pgcc da PGI Compilers & Tools.
+1. [Como instalar.](https://www.pgroup.com/doc/pgiinstall.pdf)
+2. [Download PGI Accelerator C/C++ Workstation](http://www.pgroup.com/)
+
+##### Para compilar na CPU use o gcc:
 ```
-$ gcc CVRP.c -o main
+$ gcc CVRP.c -o main -std=c99 -lm
 $ ./main
 ```
 
-Para gerar uma solução com OpenAcc para o problema use:
+##### Para compilar na GPU com OpenACC use pgcc:
 ```
-$ pgcc -acc -Minfo=accel -fast CVRP.c
+$ pgcc -acc -Minfo=all CVRP.c
 $ ./a.out
 ```
 
-Repositório com as instancias:
-http://vrp.atd-lab.inf.puc-rio.br/index.php/en/
-
-Obs.: Somente para arquivos no padrão EUC_2D
+##### Para limpar a memória cache no Linux.
+```
+$ sudo sync; sudo echo 3 > /proc/sys/vm/drop_caches
+```
 
 ```
-Copyright (C) 2015 - Péricles Pinheiro Feltrin
+Repositório com as instancias:
+[Download instâncias](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/)
+Obs.: Utilizar somente os arquivos no padrão especificado pela biblioteca [TSPLIB 95](http://vrp.atd-lab.inf.puc-rio.br/attachments/article/6/TSPLIB%2095.pdf) e com "TYPE : CVRP", "EDGE_WEIGTH_TYPE : EUC_2D" e apena um depósito central.
+```
+
+```
+Copyright (C) 2015 - [Péricles Pinheiro Feltrin](http://periclesfeltrin.com.br/)
 ```
