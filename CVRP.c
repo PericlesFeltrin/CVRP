@@ -183,8 +183,11 @@ int main(int argc, char* argv[]){
 	 * Cálculo que irá definir o tamanho do vetor que irá armazenar a resposta (rotas) 
 	 */
 	int quantRotas = quantCidades+minimo;
-	if(demandaTotal%capacidade > 50){
-		printf("dsadasds %d \n", quantRotas);
+	
+	double valor, inteiro, fracionario;
+	valor = (double)demandaTotal/(double)capacidade;
+	fracionario = modf(valor , &inteiro);
+	if(fracionario > 0.50){
 		quantRotas +=1;
 	}
 	/*

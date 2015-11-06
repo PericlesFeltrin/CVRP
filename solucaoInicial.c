@@ -54,7 +54,6 @@ void solucaoInicial(float **distancia, int quantCidade, int capacidade, int *cid
 			index++;
 			cidadeAtual = cidades[aux];
 			cidades[aux] = depositoCentral;
-			printf("%d \n", cidadeAtual);
   			w++;
   		}else{
 			rotas[index] = depositoCentral;
