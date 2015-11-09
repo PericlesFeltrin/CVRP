@@ -3,7 +3,7 @@
  */
 void calcDistancia(int quantCidades, int *cidadeX, int *cidadeY, float **distancia){
 	int i, j;
-	#pragma acc kernels loop
+	#pragma acc kernels
 	for (i = 1; i < quantCidades; i++){
 		for (j = 0; j < i; j++){
 			/*

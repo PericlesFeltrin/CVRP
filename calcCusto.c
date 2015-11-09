@@ -5,7 +5,7 @@ float calcCusto(int *rotas, float **distancia, int quantRotas){
 	float custoTotal = 0;
 	int cidadeAtual, proxCidade, i;
 	
-	#pragma acc kernels loop reduction(+:custoTotal)
+	#pragma acc kernels reduction(+:custoTotal)
 	for (i = 1; i < quantRotas; i++){
 		/*
  		 * cidadeAtual é a cidade em que o veículo esta na rota.

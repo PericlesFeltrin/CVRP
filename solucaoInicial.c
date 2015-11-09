@@ -15,7 +15,7 @@ void solucaoInicial(float **distancia, int quantCidade, int capacidade, int *cid
 	/*
 	 * Inserindo as cidades no vetor.
 	 */
-	#pragma acc kernels loop
+	#pragma acc kernels
 	for (i = 0; i < quantCidade; i++){
 		cidades[i] = i;
 	}
