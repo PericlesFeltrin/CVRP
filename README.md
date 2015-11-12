@@ -23,7 +23,9 @@ $ pgcc -acc -Minfo=accel CVRP.c -o paralelo
 $ ./paralelo
 ```
 Obs. 1: Algoritmo será executado em paralelo na GPU.
+
 Obs. 2: -Minfo=accel para ver informações somente referente ao acelerador.
+
 Obs. 3: -Minfo=all para ver todas informações.
 
 ##### Para limpar a memória cache no Linux.
