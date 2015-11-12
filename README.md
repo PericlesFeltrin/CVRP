@@ -6,7 +6,8 @@ Problema de Roteamento de Veículos Capacitados com custos simétricos.
 Antes de iniciar siga os passos os seguintes passos para instalar o [OpenACC](http://www.openacc.org/) e o compilador pgcc da PGI Compilers & Tools.
 
 1. [Como instalar.](https://www.pgroup.com/doc/pgiinstall.pdf)
-2. [Download PGI Accelerator C/C++ Workstation](http://www.pgroup.com/)
+2. [Download PGI Accelerator C/C++ Workstation.](http://www.pgroup.com/)
+3. [University Developer License.](http://www.nvidia.com/object/openacc-toolkit.html)
 
 ##### Para compilar na CPU use o gcc:
 ```sh
