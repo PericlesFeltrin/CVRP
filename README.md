@@ -7,8 +7,7 @@ Antes de iniciar siga os passos os seguintes passos para instalar o [OpenACC](ht
 
 1. [University Developer License.](http://www.nvidia.com/object/openacc-toolkit.html)
 2. [Download PGI Accelerator C/C++ Workstation.](http://www.pgroup.com/)
-3. [Como instalar.](https://www.pgroup.com/doc/pgiinstall.pdf)
-
+3. [Como instalar.](https://www.pgroup.com/doc/pgiinstall.pdf) 
 
 ##### Para compilar na CPU use o gcc:
 ```sh
@@ -33,11 +32,12 @@ Obs. 3: -Minfo=all para ver todas informações.
 $ sudo sync; sudo echo 3 > /proc/sys/vm/drop_caches
 ```
 
+##### Instâncias:
+Na pasta A-VRP encontra-se alguns arquivos com diferentes instâncias.
+Pode-se baixar outros arquivos com diferentes tamanhos de instâncias no repositório da PUC-RIO. Após baixar adicionar na pasta A-VRP.
 
-##### Repositório com as instancias:
 [Download instâncias](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/)
 
-Obs.: Utilizar somente os arquivos no padrão especificado pela biblioteca [TSPLIB 95](http://vrp.atd-lab.inf.puc-rio.br/attachments/article/6/TSPLIB%2095.pdf) e com "TYPE : CVRP", "EDGE_WEIGTH_TYPE : EUC_2D" e apena um depósito central.
-
+Obs.: Utilizar somente os arquivos no padrão especificado pela biblioteca [TSPLIB 95](http://vrp.atd-lab.inf.puc-rio.br/attachments/article/6/TSPLIB%2095.pdf) e com "TYPE : CVRP", "EDGE_WEIGTH_TYPE : EUC_2D" e apenas um depósito central.
 
 Copyright (C) 2015 - [Péricles Pinheiro Feltrin](http://periclesfeltrin.com.br/)
