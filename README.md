@@ -9,7 +9,7 @@ Antes de iniciar siga os passos os seguintes passos para instalar o [OpenACC](ht
 2. [Download PGI Accelerator C/C++ Workstation.](http://www.pgroup.com/)
 3. [Como instalar.](https://www.pgroup.com/doc/pgiinstall.pdf) 
 
-Obs.: Se utilizar o e-mail da universidade consegue-se uma licensa para desenvolvedor universitário ou pode-se conseguir uma licensa trial de 90 dias.
+Obs.: Se utilizar o e-mail da universidade consegue-se uma licença para desenvolvedor universitário ou pode-se conseguir uma licença trial de 90 dias.
 
 ##### Para compilar na CPU use o gcc:
 ```sh
