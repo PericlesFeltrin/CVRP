@@ -40,8 +40,8 @@ $ sudo sync; sudo echo 3 > /proc/sys/vm/drop_caches
 Na pasta A-VRP encontra-se alguns arquivos com diferentes instâncias.
 Pode-se baixar outros arquivos com diferentes tamanhos de instâncias no repositório da PUC-RIO. Após baixar adicionar na pasta A-VRP.
 
-[Download instâncias](http://vrp.atd-lab.inf.puc-rio.br/index.php/en/)
+[Download instâncias](http://vrp.atd-lab.inf.puc-rio.br/)
 
-Obs.: Utilizar somente os arquivos no padrão especificado pela biblioteca [TSPLIB 95](http://vrp.atd-lab.inf.puc-rio.br/attachments/article/6/TSPLIB%2095.pdf) e com "TYPE : CVRP", "EDGE_WEIGTH_TYPE : EUC_2D" e apenas um depósito central.
+Obs.: Utilizar somente os arquivos no padrão especificado pela biblioteca [TSPLIB 95](http://comopt.ifi.uni-heidelberg.de/software/TSPLIB95/) e com "TYPE : CVRP", "EDGE_WEIGTH_TYPE : EUC_2D" e apenas um depósito central.
 
 Copyright (C) 2015 - [Péricles Pinheiro Feltrin](http://periclesfeltrin.com.br/)
